@@ -165,7 +165,18 @@ class MultipleChoicePipeline(Pipeline):
                 text 5 corresponds to answer choice 1 for question 1,
                 etc.
         """
-        raise NotImplementedError("Problem 2c has not been completed yet!")
+        input_texts = []
+
+        for question, choices in zip(batch["question"], batch["choices"]):
+            for choice in choices:
+                # Construct the full input: system prompt + demonstrations + question + answer choice
+                full_input = f"{self._system_prompt}{self._demos}{question} {choice}"
+                input_texts.append(full_input)
+
+        return input_texts
+
+
+    
 
     def preprocess(self, batch: Dict[str, Any]) -> Dict[str, torch.Tensor]:
         """
