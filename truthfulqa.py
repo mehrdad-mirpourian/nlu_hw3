@@ -169,11 +169,10 @@ class MultipleChoicePipeline(Pipeline):
 
         for question, choices in zip(batch["question"], batch["choices"]):
             for choice in choices:
-                full_input = f"{self._system_prompt}{self._demos}Q: {question}\nA: {choice}"
+                answer = f"{self._system_prompt[1:] + ' ' if self._system_prompt else ''}{choice}"
+                full_input = f"{self._demos}Q: {question}\nA: {answer}"
                 input_texts.append(full_input)
-
         return input_texts
-
 
     
 
