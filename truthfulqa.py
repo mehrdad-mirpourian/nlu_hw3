@@ -192,7 +192,21 @@ class MultipleChoicePipeline(Pipeline):
             These tensors should be stored on the GPU if it is being
             used; otherwise, they should be stored on the CPU
         """
-        raise NotImplementedError("Problem 2d has not been completed yet!")
+        # Step 1: Get list of input texts (you already wrote _get_input_texts)
+        input_texts = self._get_input_texts(batch)
+
+        # Step 2: Tokenize the input texts with padding, truncation, and return PyTorch tensors
+        encoded = self.tokenizer(
+        input_texts,
+        padding=True,
+        truncation=True,
+        return_tensors="pt"
+        )
+    
+    # Step 3: Move tensors to the correct device (GPU or CPU)
+        encoded = {k: v.to(self.device) for k, v in encoded.items()}
+        return encoded
+
 
     def _forward(self, input_: Dict[str, torch.Tensor]) -> \
             Dict[str, torch.Tensor]:
