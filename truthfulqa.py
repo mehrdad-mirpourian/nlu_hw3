@@ -191,11 +191,9 @@ class MultipleChoicePipeline(Pipeline):
             decoder attention mask represented as a Tensor of 0s and 1s.
             These tensors should be stored on the GPU if it is being
             used; otherwise, they should be stored on the CPU
-        """
-        # Step 1: Get list of input texts (you already wrote _get_input_texts)
+        """        
         input_texts = self._get_input_texts(batch)
 
-        # Step 2: Tokenize the input texts with padding, truncation, and return PyTorch tensors
         encoded = self.tokenizer(
         input_texts,
         padding=True,
@@ -203,7 +201,6 @@ class MultipleChoicePipeline(Pipeline):
         return_tensors="pt"
         )
     
-    # Step 3: Move tensors to the correct device (GPU or CPU)
         encoded = {k: v.to(self.device) for k, v in encoded.items()}
         return encoded
 
