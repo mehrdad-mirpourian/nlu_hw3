@@ -222,10 +222,10 @@ class MultipleChoicePipeline(Pipeline):
             outputs = self.model(**input_)
 
     # Return the input_ids and the logits (next-token predictions)
-    return {
-        "input_ids": input_["input_ids"],
-        "logits": outputs.logits
-    }
+        return {
+            "input_ids": input_["input_ids"],
+            "logits": outputs.logits
+        }
     
 
     def postprocess(self, outputs: Dict[str, torch.Tensor]) -> Output:
