@@ -219,7 +219,7 @@ class MultipleChoicePipeline(Pipeline):
             as well as the input_ids tensor from input_
         """
         with torch.no_grad():
-        outputs = self.model(**input_)
+            outputs = self.model(**input_)
 
     # Return the input_ids and the logits (next-token predictions)
     return {
