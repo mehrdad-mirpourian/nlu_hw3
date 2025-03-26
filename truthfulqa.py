@@ -218,7 +218,15 @@ class MultipleChoicePipeline(Pipeline):
         :return: The logit scores assigned to each next-token prediction
             as well as the input_ids tensor from input_
         """
-        raise NotImplementedError("Problem 2d has not been completed yet!")
+        with torch.no_grad():
+        outputs = self.model(**input_)
+
+    # Return the input_ids and the logits (next-token predictions)
+    return {
+        "input_ids": input_["input_ids"],
+        "logits": outputs.logits
+    }
+    
 
     def postprocess(self, outputs: Dict[str, torch.Tensor]) -> Output:
         """
