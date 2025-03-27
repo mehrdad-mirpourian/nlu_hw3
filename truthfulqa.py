@@ -247,7 +247,37 @@ class MultipleChoicePipeline(Pipeline):
             responds to question i and column j corresponds to answer
             choice j
         """
-        raise NotImplementedError("Problem 2d has not been completed yet!")
+        # Extract tensors
+        logits = outputs["logits"]           # (N, L, V)
+        input_ids = outputs["input_ids"]     # (N, L)
+
+        # Shift for loss computation (ignore last token, no target to predict)
+        pred_logits = logits[:, :-1, :]      # (N, L-1, V)
+        targets = input_ids[:, 1:]           # (N, L-1)
+
+        # Flatten tensors for CrossEntropyLoss (expects 2D input and 1D target)
+        loss_per_token = self.loss_fn(
+            pred_logits.reshape(-1, pred_logits.size(-1)),
+            targets.reshape(-1)
+        )  # shape: (N * (L-1),)
+
+        # Unflatten to (N, L-1) and sum across tokens to get total loss per input
+        loss_per_input = loss_per_token.view(input_ids.size(0), -1).sum(dim=1)  # (N,)
+
+        # Reshape into matrix: rows = questions, cols = choices
+        num_questions = input_ids.size(0) // self.num_choices
+        loss_matrix = loss_per_input.view(num_questions, self.num_choices)
+
+        # Get the prediction with lowest loss for each question
+        predictions = torch.argmin(loss_matrix, dim=1)
+
+        return Output(
+            loss=loss_matrix.cpu().numpy(),
+            prediction=predictions.cpu().numpy()
+        )
+
+
+
 
 
 def run_model(pipeline: MultipleChoicePipeline, dataset: Dataset,
