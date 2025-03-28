@@ -18,6 +18,7 @@ import torch.nn as nn
 from datasets import load_dataset, Dataset
 from tqdm import tqdm
 from transformers import Pipeline, AutoModelForCausalLM, AutoTokenizer
+import hashlib
 
 
 """ Helper functions """
@@ -92,6 +93,8 @@ class MultipleChoicePipeline(Pipeline):
         device = 0 if torch.cuda.is_available() else None
         super().__init__(lm, tokenizer, device=device)
         self.model.to(self.device)
+        print("Model hash:", hash(self.model.model.base_model.model.parameters().__next__().data.cpu().numpy().tobytes()))
+
 
         # Initialize loss function (make it ignore pad tokens). Note the
         # use of the reduction="none" keyword argument.
