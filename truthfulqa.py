@@ -372,6 +372,7 @@ if __name__ == "__main__":
 
     # Load pipeline and prompts
     print(f"Loading model: {args.model}")
+    print(f"\n\n MODEL BEING LOADED: {args.model}\n\n")
     lm = MultipleChoicePipeline(model=args.model)
     if not args.no_demos:
         lm.load_demonstrations("prompt_templates/" + args.demos)
