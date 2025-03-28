@@ -93,7 +93,8 @@ class MultipleChoicePipeline(Pipeline):
         device = 0 if torch.cuda.is_available() else None
         super().__init__(lm, tokenizer, device=device)
         self.model.to(self.device)
-        print("Model hash:", hash(self.model.model.base_model.model.parameters().__next__().data.cpu().numpy().tobytes()))
+        print("Model hash:", hash(next(self.model.parameters()).data.cpu().numpy().tobytes()))
+
 
 
         # Initialize loss function (make it ignore pad tokens). Note the
