@@ -371,6 +371,7 @@ if __name__ == "__main__":
     truthfulqa = load_dataset("EleutherAI/truthful_qa_mc", split=split)
 
     # Load pipeline and prompts
+    print(f"Loading model: {args.model}")
     lm = MultipleChoicePipeline(model=args.model)
     if not args.no_demos:
         lm.load_demonstrations("prompt_templates/" + args.demos)
